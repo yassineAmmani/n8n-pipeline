@@ -1,0 +1,159 @@
+{
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "integration-erp",
+                "options": {}
+            },
+            "id": "bab31d7a-5bfc-4ec4-ad34-d9e1ac68b4c9",
+            "name": "Webhook ERP",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                -820,
+                220
+            ],
+            "webhookId": "integration-erp"
+        },
+        {
+            "parameters": {
+                "jsCode": "// 🚀 PIPELINE INTÉGRATION ERP KARIZMA - Version Corrigée\nconst inputData = $input.all()[0].json.body;\n\n// Validation des champs obligatoires\nconst requiredFields = ['nom', 'email', 'entreprise'];\nconst missingFields = requiredFields.filter(field => !inputData[field]);\n\nif (missingFields.length > 0) {\n  throw new Error(`Champs manquants: ${missingFields.join(', ')}`);\n}\n\n// Validation email simple\nconst emailRegex = /\\S+@\\S+\\.\\S+/;\nif (!emailRegex.test(inputData.email)) {\n  throw new Error('Format email invalide');\n}\n\n// Calcul score qualité\nlet score = 0;\nif (inputData.email) score += 25;\nif (inputData.entreprise && inputData.entreprise.length > 2) score += 25;\nif (inputData.telephone) score += 25;\nif (inputData.secteur) score += 25;\n\n// Enrichissement des données\nconst enrichedData = {\n  ...inputData,\n  id_unique: `CLIENT_${Date.now()}`,\n  date_creation: new Date().toISOString(),\n  statut: 'NOUVEAU',\n  source: 'API_INTEGRATION',\n  score_qualite: score,\n  priorite: score >= 75 ? 'HAUTE' : score >= 50 ? 'MOYENNE' : 'BASSE',\n  pays: inputData.pays || 'Maroc'\n};\n\nreturn enrichedData;"
+            },
+            "id": "5b8f3c11-386b-4cf2-a931-7e8c53faf431",
+            "name": "Validation & Enrichissement",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -600,
+                220
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://httpbin.org/post",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"success\": true,\n  \"message\": \"Client intégré avec succès\",\n  \"client_id\": \"{{ $('Validation & Enrichissement').item.json.id_unique }}\",\n  \"nom\": \"{{ $('Validation & Enrichissement').item.json.nom }}\",\n  \"score_qualite\": {{ $('Validation & Enrichissement').item.json.score_qualite }},\n  \"priorite\": \"{{ $('Validation & Enrichissement').item.json.priorite }}\"\n}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "json"
+                        }
+                    }
+                }
+            },
+            "id": "f011a557-fb09-4e40-a300-3e3b4655de92",
+            "name": "Simulation ERP Odoo",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -380,
+                160
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "appendOrUpdate",
+                "documentId": {
+                    "__rl": true,
+                    "value": "https://docs.google.com/spreadsheets/d/1Bovmqy7kXRJ9OtP1W6qoypdURIsLOoHi7BXotZ_kd0Q/edit?usp=sharing",
+                    "mode": "url"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Bovmqy7kXRJ9OtP1W6qoypdURIsLOoHi7BXotZ_kd0Q/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [
+                        "json"
+                    ],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "id": "8f9a22b4-da25-4884-b2d0-d5479666f1a0",
+            "name": "Log Google Sheets",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4,
+            "position": [
+                -380,
+                380
+            ],
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "JiwResKjvehPuAVU",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "{\n  \"success\": true,\n  \"message\": \"Client intégré avec succès dans le système ERP Karizma\",\n  \"client_id\": \"{{ $('Validation & Enrichissement').item.json.id_unique }}\",\n  \"nom\": \"{{ $('Validation & Enrichissement').item.json.nom }}\",\n  \"score_qualite\": \"{{ $('Validation & Enrichissement').item.json.score_qualite }}\",\n  \"priorite\": \"{{ $('Validation & Enrichissement').item.json.priorite }}\",\n  \"timestamp\": \"{{ $('Validation & Enrichissement').item.json.date_creation }}\"\n}",
+                "options": {}
+            },
+            "id": "20473af7-dc9e-4742-af41-5210f09509c3",
+            "name": "Réponse API",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                -120,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook ERP": {
+            "main": [
+                [
+                    {
+                        "node": "Validation & Enrichissement",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validation & Enrichissement": {
+            "main": [
+                [
+                    {
+                        "node": "Simulation ERP Odoo",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Log Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simulation ERP Odoo": {
+            "main": [
+                [
+                    {
+                        "node": "Réponse API",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true,
+        "instanceId": "29eb4a62abf54801684479c0e6e13c4a2982fa8bd01cb31153fbb2d2b19d4ba7"
+    }
+}

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🚀 TechFlow Solutions - Inscription Client</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .hero {
+        text-align: center;
+        color: white;
+        padding: 60px 20px;
+        margin-bottom: 40px;
+      }
+
+      .hero h1 {
+        font-size: 3.5em;
+        font-weight: 800;
+        margin-bottom: 20px;
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero p {
+        font-size: 1.3em;
+        opacity: 0.95;
+        max-width: 600px;
+        margin: 0 auto 30px;
+      }
+
+      .hero .badges {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+      }
+
+      .badge {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.9em;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+
+      .form-section {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(10px);
+      }
+
+      .info-section {
+        color: white;
+        padding: 40px;
+      }
+
+      .form-section h2 {
+        color: #2d3748;
+        font-size: 2em;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .form-section .subtitle {
+        color: #718096;
+        margin-bottom: 30px;
+        font-size: 1.1em;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        color: #4a5568;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.95em;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 15px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .submit-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 12px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+      }
+
+      .submit-btn:disabled {
+        background: #a0aec0;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .info-section h3 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      .feature {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .feature h4 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .feature p {
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .result-section {
+        grid-column: 1 / -1;
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        display: none;
+      }
+
+      .result-section.show {
+        display: block;
+        animation: slideIn 0.5s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result-content {
+        background: #f7fafc;
+        border-radius: 12px;
+        padding: 25px;
+        font-family: monospace;
+        font-size: 0.9em;
+        line-height: 1.6;
+        border: 2px solid #e2e8f0;
+      }
+
+      .success {
+        border-color: #48bb78;
+        background: #f0fff4;
+      }
+
+      .error {
+        border-color: #f56565;
+        background: #fffaf0;
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .hero h1 {
+          font-size: 2.5em;
+        }
+
+        .form-section,
+        .info-section {
+          padding: 30px 20px;
+        }
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="hero">
+        <h1>🚀 TechFlow Solutions</h1>
+        <p>
+          Plateforme d'intégration CRM automatisée avec intelligence
+          artificielle. Transformez vos leads en clients avec notre pipeline
+          d'automatisation avancé.
+        </p>
+        <div class="badges">
+          <div class="badge">🤖 IA Intégrée</div>
+          <div class="badge">⚡ Temps Réel</div>
+          <div class="badge">📊 Analytics Avancés</div>
+          <div class="badge">🔒 Sécurisé</div>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="form-section">
+          <h2>Inscription Client</h2>
+          <p class="subtitle">
+            Rejoignez notre plateforme et bénéficiez d'une intégration CRM
+            automatisée
+          </p>
+
+          <form id="clientForm">
+            <div class="form-group">
+              <label for="nom">Nom de l'entreprise *</label>
+              <input
+                type="text"
+                id="nom"
+                name="nom"
+                required
+                placeholder="Ex: TechFlow Solutions"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email professionnel *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="contact@entreprise.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="entreprise">Nom du contact *</label>
+              <input
+                type="text"
+                id="entreprise"
+                name="entreprise"
+                required
+                placeholder="Ex: Jean Dupont"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="secteur">Secteur d'activité</label>
+              <select id="secteur" name="secteur">
+                <option value="">Sélectionnez votre secteur</option>
+                <option value="Technology">Technologie</option>
+                <option value="Finance">Finance</option>
+                <option value="Healthcare">Santé</option>
+                <option value="Education">Éducation</option>
+                <option value="Retail">Commerce</option>
+                <option value="Manufacturing">Industrie</option>
+                <option value="Services">Services</option>
+                <option value="Other">Autre</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="telephone">Téléphone</label>
+              <input
+                type="tel"
+                id="telephone"
+                name="telephone"
+                placeholder="+212 6XX XXX XXX"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="taille_entreprise">Taille de l'entreprise</label>
+              <select id="taille_entreprise" name="taille_entreprise">
+                <option value="">Sélectionnez la taille</option>
+                <option value="1-10">1-10 employés</option>
+                <option value="11-50">11-50 employés</option>
+                <option value="51-200">51-200 employés</option>
+                <option value="201-1000">201-1000 employés</option>
+                <option value="1000+">Plus de 1000 employés</option>
+              </select>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              S'inscrire maintenant
+            </button>
+          </form>
+        </div>
+
+        <div class="info-section">
+          <h3>🌟 Pourquoi TechFlow ?</h3>
+
+          <div class="feature">
+            <h4>🤖 Intelligence Artificielle</h4>
+            <p>
+              Notre système IA analyse et qualifie automatiquement vos prospects
+              selon des critères avancés, optimisant votre taux de conversion.
+            </p>
+          </div>
+
+          <div class="feature">
+            <h4>⚡ Intégration Instantanée</h4>
+            <p>
+              Pipeline d'intégration en temps réel avec validation automatique
+              des données et enrichissement intelligent des profils clients.
+            </p>
+          </div>
+
+          <div class="feature">
+            <h4>📊 Analytics Prédictifs</h4>
+            <p>
+              Scoring de qualité automatique, priorisation des leads et insights
+              business pour maximiser votre ROI commercial.
+            </p>
+          </div>
+
+          <div class="feature">
+            <h4>🔒 Sécurité Enterprise</h4>
+            <p>
+              Chiffrement de bout en bout, conformité RGPD et architecture cloud
+              sécurisée pour protéger vos données sensibles.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-section" id="resultSection">
+        <h3>📊 Résultat de l'intégration</h3>
+        <div class="result-content" id="resultContent">
+          <!-- Résultat affiché ici -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("clientForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const resultSection = document.getElementById("resultSection");
+      const resultContent = document.getElementById("resultContent");
+
+      // URL du webhook N8N
+      const webhookUrl =
+        "https://yassproject.app.n8n.cloud/webhook-test/integration-erp";
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Désactiver le bouton et afficher le loading
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<span class="loading-spinner"></span>Traitement en cours...';
+
+        // Récupérer les données du formulaire
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const startTime = Date.now();
+
+          const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+          const responseTime = Date.now() - startTime;
+
+          // Afficher le résultat
+          resultContent.className = "result-content success";
+          resultContent.innerHTML = `
+✅ INSCRIPTION RÉUSSIE! (${responseTime}ms)
+
+🆔 ID Client: ${result.client_id}
+👤 Nom: ${result.nom}
+📧 Email: ${data.email}
+🏢 Entreprise: ${data.entreprise}
+🏭 Secteur: ${data.secteur || "Non spécifié"}
+📞 Téléphone: ${data.telephone || "Non renseigné"}
+
+📊 SCORING AUTOMATIQUE:
+• Score Qualité: ${result.score_qualite}%
+• Priorité: ${result.priorite}
+• Statut: ${result.message}
+• Timestamp: ${new Date().toLocaleString("fr-FR")}
+
+🚀 PROCHAINES ÉTAPES:
+• Votre profil a été créé avec succès
+• Un commercial vous contactera sous 24h
+• Accès à la plateforme envoyé par email
+• Configuration personnalisée planifiée
+
+💼 TECHFLOW SOLUTIONS:
+Pipeline d'intégration CRM automatisé
+Développé avec N8N + Intelligence Artificielle
+                `;
+
+          resultSection.classList.add("show");
+
+          // Réinitialiser le formulaire
+          form.reset();
+        } catch (error) {
+          resultContent.className = "result-content error";
+          resultContent.innerHTML = `
+❌ ERREUR D'INTÉGRATION
+
+🔍 Détails de l'erreur:
+${error.message}
+
+📥 Données envoyées:
+${JSON.stringify(data, null, 2)}
+
+🛠️ Actions correctives:
+• Vérifiez votre connexion internet
+• Réessayez dans quelques instants
+• Contactez le support si le problème persiste
+
+📞 Support technique:
+Email: support@techflow-solutions.com
+Tél: +212 5XX XXX XXX
+                `;
+
+          resultSection.classList.add("show");
+        }
+
+        // Réactiver le bouton
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "S'inscrire maintenant";
+      });
+
+      // Animation de focus sur les champs
+      const inputs = document.querySelectorAll("input, select, textarea");
+      inputs.forEach((input) => {
+        input.addEventListener("focus", function () {
+          this.parentElement.style.transform = "scale(1.02)";
+        });
+
+        input.addEventListener("blur", function () {
+          this.parentElement.style.transform = "scale(1)";
+        });
+      });
+    </script>
+  </body>
+</html>
