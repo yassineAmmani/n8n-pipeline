@@ -1,4 +1,4 @@
-# 🚀 Pipeline d'Intégration ERP avec N8N
+# 🚀 Pipeline d'Intégration avec N8N
 
 > Système d'automatisation CRM intelligent avec validation et scoring en temps réel
 
@@ -27,7 +27,7 @@ Pipeline automatisé pour traiter, valider et enrichir les données clients avec
 
 ### 🌐 Landing Page
 
-[**TechFlow Solutions**](./landing_page.html) - Formulaire client interactif avec intégration temps réel
+[**TechFlow Solutions**](./landing_page.html) - Formulaire client interactif avec intégration temps réel (Exemple de cas d'Utilisation )
 
 ### 🧪 Tests
 
